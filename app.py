@@ -24,3 +24,24 @@ def index():
         image.save(unique_filepath)
         return redirect(url_for('index'))  
     return render_template('index.html', images=all_images)
+
+@app.route('/view/<filename>')
+def view_image(filename):
+    image_path = os.path.join('/uploads', filename)
+    return render_template('view.html', image_path=image_path, filename=filename)
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/delete/<filename>')
+def delete_image(filename):
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    try:
+        os.remove(file_path)  # Delete the image file from the 'uploads' directory
+    except Exception as e:
+        print("Error deleting image:", e)
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
