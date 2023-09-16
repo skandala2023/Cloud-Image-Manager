@@ -6,9 +6,7 @@ pip install -r requirements.txt(To install libraries)
 python app.py (To Run the flask app)
 
 ## Technologies Used
-Python flask
-html
-Google Cloud (for hosting website)
+Python flask, html, Google Cloud (for hosting website)
 
 ## Webiste Url
 34.106.224.155:8000
