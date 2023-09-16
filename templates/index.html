@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Uploader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; 
+            background-color: #f7f7f7;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            width: 90%; 
+            max-width: 800px; 
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .upload-section {
+            text-align: right; 
+        }
+        /* Stylish button styles */
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
+        .upload-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        }
+        .upload-section form {
+            display: flex;
+            align-items: center;
+        }
+        .upload-section input[type="file"] {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload an Image</h1>
+        <div class="upload-section">
+            <form action="/" method="post" enctype="multipart/form-data">
+                <input type="file" name="imageInput" required>
+                <input type="submit" value="Upload" class="upload-btn">
+            </form>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
