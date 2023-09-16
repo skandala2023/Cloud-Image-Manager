@@ -1,11 +1,11 @@
 # Cloud-Image-Manager
 
 ## Setup
-First install python and pip
+First install python and pip <br>
 
-pip install -r requirements.txt(To install libraries)
+pip install -r requirements.txt(To install libraries)  <br>
 
-python app.py (To Run the flask app)
+python app.py (To Run the flask app) <br>
 
 ## Technologies Used
 Python flask, html, Google Cloud (for hosting website)
