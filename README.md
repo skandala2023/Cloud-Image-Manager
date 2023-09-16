@@ -9,7 +9,7 @@ python app.py (To Run the flask app)
 Python flask, html, Google Cloud (for hosting website)
 
 ## Webiste Url
-![Cloud Image Manager](http://34.106.224.155:8000)
+[Cloud Image Manager](http://34.106.224.155:8000)
 
 [Google](https://www.google.com/)
 
