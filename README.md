@@ -2,7 +2,9 @@
 
 ## Setup
 First install python and pip
+
 pip install -r requirements.txt(To install libraries)
+
 python app.py (To Run the flask app)
 
 ## Technologies Used
