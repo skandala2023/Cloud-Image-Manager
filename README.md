@@ -1,12 +1,49 @@
 # Cloud-Image-Manager
 
 ## Webiste Url
-[Cloud Image Manager](http://34.106.224.155:8000)
+
+Project I: [Cloud Image Manager (VM Infra)](http://34.106.224.155:8000)
+
+Project II: [Cloud Image Manager (Serverless)](https://image-manager-g-e5hfku65bq-wl.a.run.app/)
 
 ## Setup
-First install python and pip <br> pip install -r requirements.txt(To install libraries) <br> python app.py (To Run the flask app) <br>
+
+### Run locally
+
+1. Setup python and pip on your machine
+2. Install necessary packages using:
+
+```
+> pip install -r requirements.txt
+```
+
+3. Start the application:
+
+```
+> python app.py
+```
+
+### Using docker
+
+1. Setup docker on your machine and start docker service
+2. Create docker image:
+
+```
+> docker build -t image-manager
+```
+
+3. Run docker container:
+
+```
+docker run -p 4000:5000 image-manager
+```
 
 ## Technologies Used
-Python flask <br> html <br> Google Cloud (for hosting website)
 
-
+1. Python Flask
+2. HTML
+3. CSS
+4. Google Cloud Datastore (Stores image metadata)
+5. Google Cloud Storage (Stores images)
+6. Google Cloud Artifact Registry (Stores docker image)
+7. Google Cloud Run (Serverless)
