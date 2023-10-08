@@ -43,7 +43,8 @@ docker run -p 4000:5000 image-manager
 1. Python Flask
 2. HTML
 3. CSS
-4. Google Cloud Datastore (Stores image metadata)
-5. Google Cloud Storage (Stores images)
-6. Google Cloud Artifact Registry (Stores docker image)
-7. Google Cloud Run (Serverless)
+4. Google OAuth2 (User Authentication)
+5. Google Cloud Datastore (Stores image metadata)
+6. Google Cloud Storage (Stores images)
+7. Google Cloud Artifact Registry (Stores docker image)
+8. Google Cloud Run (Serverless)

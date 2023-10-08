@@ -1,124 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cloud Image Manager</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh; 
-            background-color: #f7f7f7;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-            width: 90%; 
-            max-width: 800px; 
-        }
-        h1, h2 {
-            text-align: center;
-        }
-        .upload-section {
-            text-align: right; 
-        }
-        .image-container {
-            margin: 15px;
-            display: inline-block;
-            text-align: center;
-        }
-        .image-container img {
-            max-width: 200px;
-            max-height: 200px;
-            border: 1px solid #ccc;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-        .image-container a {
-            text-decoration: none;
-            color: inherit;
-        }
-        /* Stylish button styles */
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover, input[type="submit"]:hover {
-            background-color: #0056b3;
-            color: #ffffff;
-        }
-        .delete-btn {
-            background-color: #ff4b5c;
-            color: #ffffff;
-        }
-        .download-btn {
-            background-color: #4caf50;
-            color: #ffffff;
-        }
-        .upload-btn {
-            background-color: #0099cc;
-            color: #ffffff;
-        }
-        .upload-section {
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        background-color: #f7f7f7;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+        width: 90%;
+        max-width: 800px;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      .upload-section {
+        text-align: right;
+      }
+      .image-container {
+        margin: 15px;
+        display: inline-block;
+        text-align: center;
+      }
+      .image-container img {
+        max-width: 200px;
+        max-height: 200px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+      .image-container a {
+        text-decoration: none;
+        color: inherit;
+      }
+      /* Stylish button styles */
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      input[type="submit"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover,
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+        color: #ffffff;
+      }
+      .delete-btn {
+        background-color: #ff4b5c;
+        color: #ffffff;
+      }
+      .download-btn {
+        background-color: #4caf50;
+        color: #ffffff;
+      }
+      .upload-btn {
+        background-color: #0099cc;
+        color: #ffffff;
+      }
+      .upload-section {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
-        }
-        .upload-section form {
-            display: flex;
-            align-items: center;
-        }
-        .upload-section input[type="file"] {
-            margin-right: 15px;
-        }
+      }
+      .upload-section form {
+        display: flex;
+        align-items: center;
+      }
+      .upload-section input[type="file"] {
+        margin-right: 15px;
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .logout-btn {
+        margin-right: 20px;
+        border: 1px solid black;
+        padding: 5px 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <nav>
+      <form
+        action="{{ url_for('logout') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <button class="logout-btn">Logout</button>
+      </form>
+    </nav>
     <div class="container">
-        <h1>Upload an Image</h1>
-        <div class="upload-section">
-            <form action="/" method="post" enctype="multipart/form-data">
-                <input type="file" name="imageInput" accept="image/*" required>
-                <input type="submit" value="Upload" class="upload-btn">
-            </form>
-        </div>
+      <h1>Upload an Image</h1>
+      <div class="upload-section">
+        <form action="/" method="post" enctype="multipart/form-data">
+          <input type="file" name="imageInput" accept="image/*" required />
+          <input type="submit" value="Upload" class="upload-btn" />
+        </form>
+      </div>
     </div>
 
     <div class="container">
-        <h2>Click to View and Download the Image</h2>
-        {% for img in images %}
-        <div class="image-container">
-            <a href="{{ url_for('view_image', filename=img) }}">
-                <img src="{{ url_for('uploaded_file', filename=img) }}" alt="Uploaded Image">
-            </a>
-            <div>
-                <a href="{{ url_for('delete_image', filename=img) }}">
-                    <button class="delete-btn">Delete</button>
-                </a>
-                <a href="{{ url_for('uploaded_file', filename=img) }}" download>
-                    <button class="download-btn">Download</button>
-                </a>
-            </div>
+      <h2>Click to View and Download the Image</h2>
+      {% for img in images %}
+      <div class="image-container">
+        <a href="{{ url_for('view_image', filename=img) }}">
+          <img
+            src="{{ url_for('uploaded_file', filename=img) }}"
+            alt="Uploaded Image"
+          />
+        </a>
+        <div>
+          <a href="{{ url_for('delete_image', filename=img) }}">
+            <button class="delete-btn">Delete</button>
+          </a>
+          <a href="{{ url_for('uploaded_file', filename=img) }}" download>
+            <button class="download-btn">Download</button>
+          </a>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
-</body>
+  </body>
 </html>
