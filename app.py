@@ -8,7 +8,7 @@ from google.auth.transport import requests
 
 from google.cloud import storage, datastore
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './service-account-key.json'
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './service-account-key.json'
 
 app = Flask(__name__)
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
