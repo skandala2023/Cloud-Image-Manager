@@ -153,19 +153,9 @@
     </div>
 
     <script>
-      for (
-        let i = 0;
-        i < document.getElementsByClassName("uploaded-image").length;
-        i++
-      ) {
-        document
-          .getElementById("delete-btn")
-          .addEventListener("contextmenu", (event) => event.preventDefault());
-        document
-          .getElementsByClassName("uploaded-image")
-          .item(i)
-          .addEventListener("contextmenu", (event) => event.preventDefault());
-      }
+      document.addEventListener("contextmenu", (event) =>
+        event.preventDefault()
+      );
     </script>
   </body>
 </html>
