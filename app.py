@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, g
 import jwt
-
+from datetime import timedelta
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
@@ -14,8 +14,18 @@ app = Flask(__name__)
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 CLIENT_ID = os.environ.get("CLIENT_ID")
 
-storage_client = storage.Client()
-datastore_client = datastore.Client()
+GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION')
+with open('google-credentials.json', 'w') as outfile:
+    outfile.write(GOOGLE_APPLICATION_CREDENTIALS)
+
+
+storage_client = storage.Client.from_service_account_json(
+    'google-credentials.json')
+datastore_client = datastore.Client.from_service_account_json(
+    'google-credentials.json')
+
+# storage_client = storage.Client()
+# datastore_client = datastore.Client()
 
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 
@@ -102,7 +112,8 @@ def index():
 
     if request.method == 'POST':
         image = request.files['imageInput']
-        filename_parts = os.path.splitext(image.filename)
+        fn = image.filename.replace(" ", "_").replace(":", "_").lower()
+        filename_parts = os.path.splitext(fn)
         unique_filename = f"{filename_parts[0]}_{datetime.now().strftime('%Y%m%d%H%M%S%f')}{filename_parts[1]}"
 
         # Upload image to GCP Storage
@@ -117,7 +128,8 @@ def index():
         entity = datastore.Entity(
             key=datastore_client.key('Image', unique_filename))
         entity.update({
-            'filename': unique_filename,
+            'filename': image.filename,
+            'ufid': unique_filename,
             'user': email,
             'uploaded_at': datetime.utcnow()
         })
@@ -130,7 +142,8 @@ def index():
     query = query.add_filter(
         filter=datastore.query.PropertyFilter('user', '=', email))
     all_images = list(query.fetch())
-    all_images = [image['filename'] for image in all_images]
+    all_images = [{'name': image['filename'], 'ufid': image['ufid'],
+                   'uploaded_at': image['uploaded_at']} for image in all_images]
     print(all_images)
 
     return render_template('index.html', images=all_images)
@@ -138,28 +151,39 @@ def index():
 
 @app.route('/view/<filename>')
 def view_image(filename):
-    image_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{filename}"
-    return render_template('view.html', image_url=image_url, filename=filename)
+    bucket = storage_client.bucket(BUCKET_NAME)
+    blob = bucket.blob(filename)
+    signed_url = blob.generate_signed_url(
+        version='v4',
+        # Adjust the expiration time as needed
+        expiration=timedelta(minutes=30),
+        method='GET'
+    )
 
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    image_url = f"https://storage.googleapis.com/{BUCKET_NAME}/{filename}"
-    return redirect(image_url)
+    return redirect(signed_url)
 
 
 @app.route('/delete/<filename>')
 def delete_image(filename):
-    # Delete image from GCP Storage
-    bucket = storage_client.bucket(BUCKET_NAME)
-    blob = bucket.blob(filename)
-    blob.delete()
+    try:
+        bucket = storage_client.bucket(BUCKET_NAME)
+        blob = bucket.blob(filename)
+        blob.delete()
 
-    # Delete image metadata from Datastore
-    key = datastore_client.key('Image', filename)
-    datastore_client.delete(key)
+        query = datastore_client.query(kind='Image')
+        query.add_filter('ufid', '=', filename)
 
-    return redirect(url_for('index'))
+        results = list(query.fetch())
+
+        for entity in results:
+            datastore_client.delete(entity.key)
+
+        return redirect(url_for('index'))
+    except Exception as e:
+        print(":------------------")
+        print(e)
+        print(":------------------")
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

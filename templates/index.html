@@ -12,7 +12,7 @@
         flex-direction: column;
         align-items: center;
         height: 100vh;
-        background-color: rgb(26 236 102)
+        background-color: rgb(26 236 102);
       }
       .container {
         background-color: #ffffff;
@@ -132,19 +132,20 @@
       <h2>Click to View and Download the Image</h2>
       {% for img in images %}
       <div class="image-container">
-        <a href="{{ url_for('view_image', filename=img) }}">
+        <a href="{{ url_for('view_image', filename=img.ufid) }}">
           <img
-            src="{{ url_for('uploaded_file', filename=img) }}"
+            src="{{ url_for('view_image', filename=img.ufid) }}"
             alt="Uploaded Image"
           />
         </a>
         <div>
-          <a href="{{ url_for('delete_image', filename=img) }}">
+          <a href="{{ url_for('delete_image', filename=img.ufid) }}">
             <button class="delete-btn">Delete</button>
           </a>
-          <a href="{{ url_for('uploaded_file', filename=img) }}" download>
+          <a href="{{ url_for('view_image', filename=img.ufid) }}" download>
             <button class="download-btn">Download</button>
           </a>
+          <h5>Uptime: {{ img.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</h5>
         </div>
       </div>
       {% endfor %}
