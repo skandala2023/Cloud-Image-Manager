@@ -129,18 +129,19 @@
     </div>
 
     <div class="container">
-      <h2>Click to View and Download the Image</h2>
+      <h2>Click to Download the Image</h2>
       {% for img in images %}
       <div class="image-container">
         <a href="{{ url_for('view_image', filename=img.ufid) }}">
           <img
+            class="uploaded-image"
             src="{{ url_for('view_image', filename=img.ufid) }}"
             alt="Uploaded Image"
           />
         </a>
         <div>
           <a href="{{ url_for('delete_image', filename=img.ufid) }}">
-            <button class="delete-btn">Delete</button>
+            <button class="delete-btn" id="delete-button">Delete</button>
           </a>
           <a href="{{ url_for('view_image', filename=img.ufid) }}" download>
             <button class="download-btn">Download</button>
@@ -150,5 +151,22 @@
       </div>
       {% endfor %}
     </div>
+
+    <script>
+      document
+        .getElementById("delete-button")
+        .addEventListener("contextmenu", (event) => event.preventDefault());
+
+      for (
+        let i = 0;
+        i < document.getElementsByClassName("uploaded-image").length;
+        i++
+      ) {
+        document
+          .getElementsByClassName("uploaded-image")
+          .item(i)
+          .addEventListener("contextmenu", (event) => event.preventDefault());
+      }
+    </script>
   </body>
 </html>
