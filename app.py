@@ -14,6 +14,7 @@ app = Flask(__name__)
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 CLIENT_ID = os.environ.get("CLIENT_ID")
 
+
 GOOGLE_APPLICATION_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION')
 with open('google-credentials.json', 'w') as outfile:
     outfile.write(GOOGLE_APPLICATION_CREDENTIALS)
@@ -149,13 +150,24 @@ def index():
     return render_template('index.html', images=all_images)
 
 
+@app.route('/preview/<filename>')
+def preview_image(filename):
+    bucket = storage_client.bucket(BUCKET_NAME)
+    blob = bucket.blob(filename)
+    signed_url = blob.generate_signed_url(
+        version='v4',
+        expiration=timedelta(minutes=30),
+        method='GET'
+    )
+    return render_template('view.html', url=signed_url, filename=filename)
+
+
 @app.route('/view/<filename>')
 def view_image(filename):
     bucket = storage_client.bucket(BUCKET_NAME)
     blob = bucket.blob(filename)
     signed_url = blob.generate_signed_url(
         version='v4',
-        # Adjust the expiration time as needed
         expiration=timedelta(minutes=30),
         method='GET'
     )

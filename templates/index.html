@@ -129,12 +129,11 @@
     </div>
 
     <div class="container">
-      <h2>Click to Download the Image</h2>
+      <h2>Click to View and Download the Image</h2>
       {% for img in images %}
       <div class="image-container">
         <a href="{{ url_for('view_image', filename=img.ufid) }}">
           <img
-            class="uploaded-image"
             src="{{ url_for('view_image', filename=img.ufid) }}"
             alt="Uploaded Image"
           />
@@ -143,15 +142,14 @@
           <a href="{{ url_for('delete_image', filename=img.ufid) }}">
             <button class="delete-btn">Delete</button>
           </a>
-          <a href="{{ url_for('view_image', filename=img.ufid) }}" download>
-            <button class="download-btn">Download</button>
+          <a href="{{ url_for('preview_image', filename=img.ufid) }}">
+            <button class="download-btn">View</button>
           </a>
           <h5>Uptime: {{ img.uploaded_at.strftime('%Y-%m-%d %H:%M:%S') }}</h5>
         </div>
       </div>
       {% endfor %}
     </div>
-
     <script>
       document.addEventListener("contextmenu", (event) =>
         event.preventDefault()
