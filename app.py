@@ -1,8 +1,7 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, g, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, g
 import jwt
-import io
 from datetime import timedelta
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -154,12 +153,11 @@ def index():
 def view_image(filename):
     bucket = storage_client.bucket(BUCKET_NAME)
     blob = bucket.blob(filename)
-    image_data = blob.download_as_bytes()
-    return send_file(
-        io.BytesIO(image_data),
-        mimetype='image/jpeg',
-        as_attachment=True,
-        attachment_filename=filename
+    signed_url = blob.generate_signed_url(
+        version='v4',
+        # Adjust the expiration time as needed
+        expiration=timedelta(minutes=30),
+        method='GET'
     )
 
     return redirect(signed_url)
