@@ -107,6 +107,16 @@ def logout():
     return response
 
 
+def mtdata(image):
+    image_size_kb = image['image_size'] / 1024
+    image_size_mb = image_size_kb / 1024
+    if image_size_mb > 1:
+        image['image_size'] = f"{round(image_size_mb, 2)} Mb"
+    else:
+        image['image_size'] = f"{round(image_size_kb, 2)} Kb"
+    return image['image_size']
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     email = g.get('email', '')
@@ -132,6 +142,7 @@ def index():
             'filename': image.filename,
             'ufid': unique_filename,
             'user': email,
+            'image_size': blob.size,
             'uploaded_at': datetime.utcnow()
         })
         datastore_client.put(entity)
@@ -143,8 +154,9 @@ def index():
     query = query.add_filter(
         filter=datastore.query.PropertyFilter('user', '=', email))
     all_images = list(query.fetch())
-    all_images = [{'name': image['filename'], 'ufid': image['ufid'],
-                   'uploaded_at': image['uploaded_at']} for image in all_images]
+
+    all_images = [{'name': image['filename'], 'image_size': mtdata(
+        image), 'ufid': image['ufid'], 'uploaded_at': image['uploaded_at']} for image in all_images]
     print(all_images)
 
     return render_template('index.html', images=all_images)
