@@ -141,7 +141,7 @@
         </a>
         <div>
           <a href="{{ url_for('delete_image', filename=img.ufid) }}">
-            <button class="delete-btn" id="delete-button">Delete</button>
+            <button class="delete-btn">Delete</button>
           </a>
           <a href="{{ url_for('view_image', filename=img.ufid) }}" download>
             <button class="download-btn">Download</button>
@@ -153,15 +153,14 @@
     </div>
 
     <script>
-      document
-        .getElementById("delete-button")
-        .addEventListener("contextmenu", (event) => event.preventDefault());
-
       for (
         let i = 0;
         i < document.getElementsByClassName("uploaded-image").length;
         i++
       ) {
+        // document
+        //   .getElementById("delete-btn")
+        //   .addEventListener("contextmenu", (event) => event.preventDefault());
         document
           .getElementsByClassName("uploaded-image")
           .item(i)
