@@ -44,7 +44,11 @@
     <div class="filename">View</div>
     <img src="{{ url }}" alt="Uploaded Image" />
     <div class="buttons">
-      <a href="{{ url_for('view_image', filename=filename) }}" download>
+      <a
+        href="{{ url_for('view_image', filename=filename) }}"
+        download
+        style="text-decoration: none"
+      >
         <button class="delete-btn">Download</button>
       </a>
       <a href="{{ url_for('index') }}">
