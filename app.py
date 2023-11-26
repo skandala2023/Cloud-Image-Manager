@@ -187,6 +187,14 @@ def view_image(filename):
     return redirect(signed_url)
 
 
+@app.route('/download/<filename>')
+def download_image(filename):
+    bucket = storage_client.bucket(BUCKET_NAME)
+    blob = bucket.blob(filename)
+    image_data = blob.download_as_bytes()
+    return make_response(image_data)
+
+
 @app.route('/delete/<filename>')
 def delete_image(filename):
     try:
